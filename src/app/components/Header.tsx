@@ -1,20 +1,19 @@
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import Link from "next/link";
-import React from "react";
 
 const Header = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="transparent">
+      <AppBar position="static" sx={{backgroundColor: "#1d1a1a"}}>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} color="white">
-            Avatar Creator
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Create Avatar AI
           </Typography>
-          <Link href="/">
-            <Button variant="text">Home</Button>
+          <Link href="/" passHref>
+            <Button color="inherit">Home</Button>
           </Link>
-          <Link href="/dashboard">
-            <Button variant="text">Dashboard</Button>
+          <Link href="/dashboard" passHref>
+            <Button color="inherit">Dashboard</Button>
           </Link>
         </Toolbar>
       </AppBar>

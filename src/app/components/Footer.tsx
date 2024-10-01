@@ -1,5 +1,4 @@
 import { Box, Typography } from '@mui/material';
-import React from 'react';
 
 const Footer = () => {
   return (
@@ -12,7 +11,7 @@ const Footer = () => {
         mt: 'auto',
       }}
     >
-      <Typography variant="body1">© 2024 Avatar Creator. Todos os direitos reservados.</Typography>
+      <Typography variant="body1">© 2024 Create Avatar AI. Todos os direitos reservados.</Typography>
     </Box>
   );
 };
