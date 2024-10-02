@@ -3,10 +3,10 @@
 import { cookies } from "next/headers";
 
 export async function handleCookie(key: string, value: string) {
-  cookies().set(key, value, { secure: true, sameSite: "none" });
+  cookies().set(key, value, { secure: true, sameSite: "none", expires: 2 });
 }
 
 export async function getCookie(key: string) {
   const token = cookies().get(key);
-  console.log(token);
+  return token;
 }

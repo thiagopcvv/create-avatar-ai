@@ -11,7 +11,7 @@ const AnimatedBox = () => (
     transition={{ duration: 1 }}
   >
     <Typography variant="h2" component="h1" gutterBottom color="white">
-      Bem-vindo ao <strong>Create Avatar AI</strong>
+      Welcome to <strong>Create Avatar AI</strong>
     </Typography>
     <Typography variant="body1" component="p" gutterBottom color="white">
       Crie avatares personalizados com inteligência artificial de forma rápida e
@@ -24,7 +24,7 @@ const AnimatedBox = () => (
     >
       <Link href="/dashboard" passHref>
         <Button variant="contained" color="primary" sx={{ mt: 4 }}>
-          Acessar Dashboard
+          Access Dashboard
         </Button>
       </Link>
     </motion.div>

@@ -1,11 +1,14 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, Grid2, Paper, Typography, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import Header from "../components/Header";
 import { getCookie } from "../actions/cookie";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
+import Footer from "../components/Footer";
 
 const card = {
   title: "Gerar Avatar",
@@ -15,15 +18,25 @@ const card = {
 };
 
 const Dashboard = () => {
-  useEffect(() => {
-    const fn = async () => {
-      console.log("aqui");
-      await getCookie("token");
-      const tok =  Cookies.get("token")
-      console.log(tok, "tik")
-    };
-    fn();
-  }, []);
+  const router = useRouter();
+
+  const handleCreate = async () => {
+    if (await getCookie("token")) {
+    } else {
+      Swal.fire({
+        title: "Warning!",
+        text: "You need to log in to continue",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "sign in",
+        cancelButtonText: "cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          router.push("/login");
+        }
+      });
+    }
+  };
 
   return (
     <>
@@ -66,6 +79,7 @@ const Dashboard = () => {
                   <Button
                     variant="contained"
                     sx={{ mt: 2, backgroundColor: "white", color: card.color }}
+                    onClick={handleCreate}
                   >
                     {card.buttonText}
                   </Button>
@@ -75,6 +89,7 @@ const Dashboard = () => {
           </Grid2>
         </Box>
       </Box>
+      <Footer />
     </>
   );
 };

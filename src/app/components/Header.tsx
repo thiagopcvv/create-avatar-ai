@@ -4,16 +4,13 @@ import Link from "next/link";
 const Header = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{backgroundColor: "#181616"}}>
+      <AppBar position="static" sx={{ backgroundColor: "#181616" }}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Create Avatar AI
           </Typography>
-          <Link href="/" passHref>
-            <Button variant="text">Home</Button>
-          </Link>
-          <Link href="/dashboard" passHref>
-            <Button variant="text">Dashboard</Button>
+          <Link href="/login" passHref>
+            <Button variant="text">Login</Button>
           </Link>
         </Toolbar>
       </AppBar>
