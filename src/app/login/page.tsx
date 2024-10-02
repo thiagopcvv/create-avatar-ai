@@ -1,25 +1,43 @@
 "use client";
 
 import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { auth } from "../../../firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import Cookies from "js-cookie";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import { handleCookie } from "../actions/cookie";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleLogin = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
+
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      const token = await user.getIdToken();
+      Cookies.set("token", token, { secure: true, sameSite: "none" });
+      await handleCookie("token", token);
+
       router.push("/dashboard");
-    } catch (error) {
-      console.log(error);
-      setError("Credenciais inválidas. Tente novamente.");
+    } catch (err) {
+      console.log(err);
+      setError("Falha no login. Verifique suas credenciais.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,8 +95,9 @@ export default function Login() {
           variant="contained"
           color="primary"
           sx={{ mt: 2, width: "100%" }}
+          disabled={loading}
         >
-          Entrar
+          {loading ? "Entrando..." : "Entrar"}
         </Button>
       </Box>
     </Box>

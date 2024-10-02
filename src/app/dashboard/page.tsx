@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Grid2, Paper, Typography, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import Header from "../components/Header";
-import { useAuth } from "../context/AuthContext";
-import { useRouter } from "next/navigation";
+import { getCookie } from "../actions/cookie";
+import Cookies from "js-cookie";
 
 const card = {
   title: "Gerar Avatar",
@@ -15,16 +15,15 @@ const card = {
 };
 
 const Dashboard = () => {
-  const { user } = useAuth();
-  const router = useRouter();
-
-  const handleGenerateAvatar = () => {
-    if (!user) {
-      router.push("/login");
-    } else {
-      console.log("Avatar gerado!");
-    }
-  };
+  useEffect(() => {
+    const fn = async () => {
+      console.log("aqui");
+      await getCookie("token");
+      const tok =  Cookies.get("token")
+      console.log(tok, "tik")
+    };
+    fn();
+  }, []);
 
   return (
     <>
@@ -67,7 +66,6 @@ const Dashboard = () => {
                   <Button
                     variant="contained"
                     sx={{ mt: 2, backgroundColor: "white", color: card.color }}
-                    onClick={handleGenerateAvatar}
                   >
                     {card.buttonText}
                   </Button>
