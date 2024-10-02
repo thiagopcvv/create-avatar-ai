@@ -1,4 +1,4 @@
-import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 export const metadata = {
   title: "AvatarUI",
@@ -12,10 +12,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body style={{ backgroundColor: "#100f0f" }}>
-        <Header />
-        {children}
-      </body>
+      <body style={{ backgroundColor: "#100f0f" }}>{children}</body>
+      <Footer />
     </html>
   );
 }
