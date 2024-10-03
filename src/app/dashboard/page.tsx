@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Box, Grid2, Paper, Typography, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import Header from "../components/Header";
@@ -9,6 +9,7 @@ import { getCookie } from "../actions/cookie";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Footer from "../components/Footer";
+import ModalGenerateImg from "../components/ModalGenrate";
 
 const card = {
   title: "Gerar Avatar",
@@ -18,10 +19,13 @@ const card = {
 };
 
 const Dashboard = () => {
+  const [visibleModal, setVisibleModal] = useState(false);
   const router = useRouter();
 
   const handleCreate = async () => {
+    console.log(await getCookie("token"));
     if (await getCookie("token")) {
+      setVisibleModal(true);
     } else {
       Swal.fire({
         title: "Warning!",
@@ -89,6 +93,10 @@ const Dashboard = () => {
           </Grid2>
         </Box>
       </Box>
+      <ModalGenerateImg
+        visible={visibleModal}
+        handleClose={() => setVisibleModal(false)}
+      />
       <Footer />
     </>
   );
