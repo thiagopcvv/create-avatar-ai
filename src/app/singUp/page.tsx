@@ -5,6 +5,8 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { signup } from "../actions/auth";
 import { useAuthStore } from "../store/useAuthStore";
 import { useState } from "react";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 interface iErrorsState {
   name?: string[];
@@ -24,6 +26,7 @@ export default function SignUp() {
     password: undefined,
   });
   const { setUser } = useAuthStore();
+  const router = useRouter();
 
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
@@ -39,12 +42,19 @@ export default function SignUp() {
     formData.append("password", formState.password);
 
     const result = await signup(formData);
-
+    console.log(result.user)
     if (result.errors) {
       setErrors(result.errors);
-    } else if (result.success) {
+    } else if (result.user) {
       setUser(result.user);
       console.log("Cadastro realizado com sucesso!");
+      Swal.fire({
+        title: "Cadastro realizado!",
+        text: `Bem-vindo, ${name}!`,
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+      router.push("/dashboard");
     }
   };
 

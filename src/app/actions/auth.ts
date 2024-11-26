@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SignupFormSchema, } from "@/app/lib/definitions";
-import { createUserWithEmailAndPassword, updateProfile, signOut as firebaseSignOut } from "firebase/auth";
+import { SignupFormSchema } from "@/app/lib/definitions";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signOut as firebaseSignOut,
+} from "firebase/auth";
 import Swal from "sweetalert2";
 import { auth } from "../../../firebaseConfig";
 import { getCookie, handleCookie } from "./cookie";
-import { redirect } from "next/navigation";
 import { cache } from "react";
-
 
 export const getUser = cache(async () => {
   const session = await getCookie("token");
@@ -38,7 +40,11 @@ export async function signup(formData: FormData) {
   const { name, email, password } = validatedFields.data;
 
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     const user = userCredential.user;
 
     await updateProfile(user, { displayName: name });
@@ -46,14 +52,7 @@ export async function signup(formData: FormData) {
     await handleCookie("token", token);
     console.log("Usuário criado com sucesso:", user);
 
-    Swal.fire({
-      title: "Cadastro realizado!",
-      text: `Bem-vindo, ${name}!`,
-      icon: "success",
-      confirmButtonText: "OK",
-    });
-
-    return { user: user };
+    return { user };
   } catch (error: any) {
     console.error("Erro ao criar usuário:", error.message);
 
@@ -68,7 +67,6 @@ export async function signup(formData: FormData) {
   }
 }
 
-
 export function logout() {
   firebaseSignOut(auth)
     .then(() => {
@@ -79,8 +77,6 @@ export function logout() {
         icon: "success",
         confirmButtonText: "OK",
       });
-
-      redirect('/dashboard')
     })
     .catch((error) => {
       console.error("Erro ao tentar deslogar:", error.message);
@@ -92,4 +88,3 @@ export function logout() {
       });
     });
 }
-

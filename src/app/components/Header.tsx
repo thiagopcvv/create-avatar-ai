@@ -12,7 +12,13 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { logout } from "../actions/auth";
 
 const Header = () => {
-  const { user } = useAuthStore();
+  const { user, setUser } = useAuthStore();
+
+  function handleLogout() {
+    logout();
+    setUser(undefined);
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ backgroundColor: "#181616" }}>
@@ -21,11 +27,11 @@ const Header = () => {
             Create Avatar AI
           </Typography>
           {user ? (
-            <>
-              <IconButton color="primary" onClick={logout}>
+            <Link href="/dashboard" passHref>
+              <IconButton color="primary" onClick={handleLogout}>
                 <LogoutIcon />{" "}
               </IconButton>
-            </>
+            </Link>
           ) : (
             <>
               <Link href="/login" passHref>
