@@ -1,10 +1,52 @@
+"use client";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useState } from "react";
-import { useFormState } from "react-dom";
 import { signup } from "../actions/auth";
+import { useAuthStore } from "../store/useAuthStore";
+import { useState } from "react";
+
+interface iErrorsState {
+  name?: string[];
+  email?: string[];
+  password?: string[];
+}
 
 export default function SignUp() {
-  const [state, action] = useFormState(signup, undefined);
+  const [formState, setFormState] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState<iErrorsState>({
+    name: undefined,
+    email: undefined,
+    password: undefined,
+  });
+  const { setUser } = useAuthStore();
+
+  const handleInputChange = (event: any) => {
+    const { name, value } = event.target;
+    setFormState({ ...formState, [name]: value });
+  };
+
+  const handleRegister = async (event: any) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append("name", formState.name);
+    formData.append("email", formState.email);
+    formData.append("password", formState.password);
+
+    const result = await signup(formData);
+
+    if (result.errors) {
+      setErrors(result.errors);
+    } else if (result.success) {
+      setUser(result.user);
+      console.log("Cadastro realizado com sucesso!");
+    }
+  };
 
   return (
     <Box
@@ -32,23 +74,23 @@ export default function SignUp() {
         <Typography variant="h4" mb={2}>
           Sign Up
         </Typography>
-        {state?.errors.name && (
+        {errors?.name && (
           <Typography variant="body2" color="error" mb={2}>
-            {state?.errors.name.map((error) => (
+            {errors.name.map((error) => (
               <li key={error}>- {error}</li>
             ))}
           </Typography>
         )}
-        {state?.errors.email && (
+        {errors.email && (
           <Typography variant="body2" color="error" mb={2}>
-            {state?.errors.email.map((error) => (
+            {errors.email.map((error) => (
               <li key={error}>- {error}</li>
             ))}
           </Typography>
         )}
-        {state?.errors.password && (
+        {errors.password && (
           <Typography variant="body2" color="error" mb={2}>
-            {state?.errors.password.map((error) => (
+            {errors.password.map((error) => (
               <li key={error}>- {error}</li>
             ))}
           </Typography>
@@ -57,22 +99,29 @@ export default function SignUp() {
           fullWidth
           label="Name"
           margin="normal"
-          type="default"
-          id="email"
+          name="name"
+          value={formState.name}
+          onChange={handleInputChange}
           required
         />
         <TextField
           fullWidth
           label="Email"
           margin="normal"
+          name="email"
           type="email"
+          value={formState.email}
+          onChange={handleInputChange}
           required
         />
         <TextField
           fullWidth
           label="Password"
           margin="normal"
+          name="password"
           type="password"
+          value={formState.password}
+          onChange={handleInputChange}
           required
         />
         <Button

@@ -7,6 +7,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import Cookies from "js-cookie";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { handleCookie } from "../actions/cookie";
+import { useAuthStore } from "../store/useAuthStore";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -14,6 +15,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { setUser } = useAuthStore();
 
   const handleLogin = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -31,6 +33,7 @@ export default function Login() {
       const token = await user.getIdToken();
       Cookies.set("token", token, { secure: true, sameSite: "none" });
       await handleCookie("token", token);
+      setUser(user);
 
       router.push("/dashboard");
     } catch (err) {

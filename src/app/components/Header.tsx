@@ -1,7 +1,18 @@
-import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+} from "@mui/material";
 import Link from "next/link";
+import { useAuthStore } from "../store/useAuthStore";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { logout } from "../actions/auth";
 
 const Header = () => {
+  const { user } = useAuthStore();
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ backgroundColor: "#181616" }}>
@@ -9,9 +20,22 @@ const Header = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Create Avatar AI
           </Typography>
-          <Link href="/login" passHref>
-            <Button variant="text">Login</Button>
-          </Link>
+          {user ? (
+            <>
+              <IconButton color="primary" onClick={logout}>
+                <LogoutIcon />{" "}
+              </IconButton>
+            </>
+          ) : (
+            <>
+              <Link href="/login" passHref>
+                <Button variant="text">Login</Button>
+              </Link>
+              <Link href="/singUp" passHref>
+                <Button variant="text">Register</Button>
+              </Link>
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
