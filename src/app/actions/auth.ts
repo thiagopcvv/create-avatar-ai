@@ -3,9 +3,24 @@ import { SignupFormSchema, } from "@/app/lib/definitions";
 import { createUserWithEmailAndPassword, updateProfile, signOut as firebaseSignOut } from "firebase/auth";
 import Swal from "sweetalert2";
 import { auth } from "../../../firebaseConfig";
-import { handleCookie } from "./cookie";
+import { getCookie, handleCookie } from "./cookie";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 
+
+export const getUser = cache(async () => {
+  const session = await getCookie("token");
+  if (!session) return null;
+
+  try {
+    const user = auth.currentUser;
+
+    return user;
+  } catch (error: any) {
+    console.log("Failed to fetch user", error);
+    return null;
+  }
+});
 
 export async function signup(formData: FormData) {
   const validatedFields = SignupFormSchema.safeParse({

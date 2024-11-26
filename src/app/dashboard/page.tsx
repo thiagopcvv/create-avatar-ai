@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import { Box, Grid2, Paper, Typography, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import Header from "../components/Header";
-import { getCookie } from "../actions/cookie";
-// import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Footer from "../components/Footer";
 import ModalGenerateImg from "../components/ModalGenrate";
+import { auth } from "../../../firebaseConfig";
+import { getUser } from "../actions/auth";
 
 const card = {
   title: "Gerar Avatar",
@@ -19,12 +19,14 @@ const card = {
 };
 
 const Dashboard = () => {
+  console.log(auth);
+
   const [visibleModal, setVisibleModal] = useState(false);
   const router = useRouter();
 
   const handleCreate = async () => {
-    console.log(await getCookie("token"));
-    if (await getCookie("token")) {
+    const user = await getUser();
+    if (user) {
       setVisibleModal(true);
     } else {
       Swal.fire({
