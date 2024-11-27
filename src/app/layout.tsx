@@ -1,44 +1,45 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { StyledEngineProvider } from "@mui/material";
+import { useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { Inter } from "next/font/google";
 import { getUser } from "./actions/auth";
+import { useAuthStore } from "./store/useAuthStore";
 
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
 });
 
+const guestOnlyRoutes = ["/login", "/singUp"];
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
+  const { user, setUser } = useAuthStore();
 
   useEffect(() => {
     const checkAuth = async () => {
-      const userData = await getUser();
-      setLoading(false);
+      if (!user) {
+        const userData = await getUser();
+        if (userData) setUser(userData);
+      }
 
-      if (!userData) router.push("/dashboard");
+      if (user && guestOnlyRoutes.includes(pathname)) {
+        router.push("/dashboard");
+      }
     };
 
     checkAuth();
-  }, [router]);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  }, [router, pathname, user, setUser]);
 
   return (
     <html className={inter.className}>
-      <body style={{ backgroundColor: "#100f0f" }}>
-        <StyledEngineProvider injectFirst>{children}</StyledEngineProvider>
-      </body>
+      <body style={{ backgroundColor: "#100f0f" }}>{children}</body>
     </html>
   );
 }

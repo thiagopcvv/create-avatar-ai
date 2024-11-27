@@ -8,7 +8,6 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Footer from "../components/Footer";
 import ModalGenerateImg from "../components/ModalGenrate";
-import { auth } from "../../../firebaseConfig";
 import { getUser } from "../actions/auth";
 
 const card = {
@@ -19,8 +18,6 @@ const card = {
 };
 
 const Dashboard = () => {
-  console.log(auth);
-
   const [visibleModal, setVisibleModal] = useState(false);
   const router = useRouter();
 

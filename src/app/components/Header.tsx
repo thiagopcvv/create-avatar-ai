@@ -13,7 +13,6 @@ import { logout } from "../actions/auth";
 
 const Header = () => {
   const { user, setUser } = useAuthStore();
-
   function handleLogout() {
     logout();
     setUser(undefined);

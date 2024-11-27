@@ -5,9 +5,8 @@ import type { NextRequest } from "next/server";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const user = await getUser();
-
   // Rotas públicas
-  const publicRoutes = ["/login", "/signup", "/"];
+  const publicRoutes = ["/login", "/signup",];
 
   // Caso não esteja autenticado e acesse rota protegida
   if (!user && !publicRoutes.includes(pathname)) {
